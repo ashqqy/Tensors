@@ -1,0 +1,16 @@
+Language: Cpp
+Standard: Latest
+
+IndentCaseBlocks: true
+IndentWidth: 4
+UseTab: Never
+
+PointerAlignment: Left
+MaxEmptyLinesToKeep: 2
+ColumnLimit: 100
+
+BreakTemplateDeclarations: Yes
+
+AllowShortBlocksOnASingleLine: Always
+AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortFunctionsOnASingleLine: InlineOnly
