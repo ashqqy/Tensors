@@ -2,9 +2,11 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstddef>
 
 #include "math.hpp"
 #include "tensor.hpp"
+#include "validation.hpp"
 
 namespace attn::ops {
 

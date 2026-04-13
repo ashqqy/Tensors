@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <iterator>
 #include <stdexcept>
 
 namespace attn::details {
