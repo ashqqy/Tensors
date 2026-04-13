@@ -5,8 +5,6 @@
 - GTest
 - [LibTorch](https://pytorch.org/get-started/locally/)
 
-Torch необходим только для таргета correctness_tests.
-
 ## Сборка
 ```
 cmake -S . -B ./build -DCMAKE_PREFIX_PATH="/путь/до/libtorch"
