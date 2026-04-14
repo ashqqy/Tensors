@@ -44,20 +44,20 @@ inline void softmax(Tensor& input) {
     }
 }
 
-inline Tensor attention(const Tensor& queries, const Tensor& keys, const Tensor& values) {
+inline Tensor attention(const Tensor& queries, const Tensor& keys, const Tensor& values,
+                        attn::math::MatMulType type) {
     details::validate_attention_dimensions(queries, keys, values);
 
-    Tensor scores = math::multiply_tr(queries, keys);
+    Tensor scores = math::multiply(queries, attn::math::transpose(keys), type);
 
     float d_k = static_cast<float>(queries.get_cols());
     float scale_factor = 1 / std::sqrt(d_k);
+
     math::scale(scores, scale_factor);
 
     softmax(scores);
 
-    Tensor values_tr = math::transpose(values);
-
-    return math::multiply_tr(scores, values_tr);
+    return math::multiply(scores, values, type);
 }
 
 } // namespace attn::ops

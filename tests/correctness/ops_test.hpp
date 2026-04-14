@@ -60,7 +60,9 @@ TEST_F(TensorOpsTorchTest, AttentionMatchesTorch1) {
     Tensor K = Tensor::make_view(k_data.data(), batch_size, seq_len_k, d_k);
     Tensor V = Tensor::make_view(v_data.data(), batch_size, seq_len_k, d_v);
 
-    Tensor actual_result = attention(Q, K, V);
+    Tensor actual_result_naive = attention(Q, K, V, attn::math::MatMulType::NAIVE);
+    Tensor actual_result_cf = attention(Q, K, V, attn::math::MatMulType::CACHE_OPTIMIZED);
+    Tensor actual_result_simd = attention(Q, K, V, attn::math::MatMulType::SIMD);
 
     auto t_Q = torch::from_blob(q_data.data(), {batch_size, seq_len_q, d_k}, options);
     auto t_K = torch::from_blob(k_data.data(), {batch_size, seq_len_k, d_k}, options);
@@ -68,10 +70,11 @@ TEST_F(TensorOpsTorchTest, AttentionMatchesTorch1) {
 
     auto t_expected = torch::scaled_dot_product_attention(t_Q, t_K, t_V);
 
-    auto t_actual = torch::from_blob(actual_result.data(), {batch_size, seq_len_q, d_v}, options);
+    auto t_actual_naive = torch::from_blob(actual_result_naive.data(), {batch_size, seq_len_q, d_v}, options);
+    auto t_actual_cf = torch::from_blob(actual_result_cf.data(), {batch_size, seq_len_q, d_v}, options);
+    auto t_actual_simd = torch::from_blob(actual_result_simd.data(), {batch_size, seq_len_q, d_v}, options);
 
-    float max_diff = torch::abs(t_actual - t_expected).max().item<float>();
-    std::cout << "[ ATTENTION DIFF ] Max absolute error: " << max_diff << std::endl;
-
-    EXPECT_TRUE(torch::allclose(t_actual, t_expected, epsilon, epsilon));
+    EXPECT_TRUE(torch::allclose(t_actual_naive, t_expected, epsilon, epsilon));
+    EXPECT_TRUE(torch::allclose(t_actual_cf, t_expected, epsilon, epsilon));
+    EXPECT_TRUE(torch::allclose(t_actual_simd, t_expected, epsilon, epsilon));
 }

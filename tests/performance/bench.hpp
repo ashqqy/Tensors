@@ -13,14 +13,14 @@
 namespace bench {
 
 struct Context {
-    int64_t batch_size = 12;
-    int64_t seq_len_q = 512;
-    int64_t seq_len_k = 512;
+    int64_t batch_size = 4;
+    int64_t seq_len_q = 1024;
+    int64_t seq_len_k = 1024;
     int64_t d_k = 64;
     int64_t d_v = 128;
 
     std::size_t warmup = 5;
-    std::size_t repeats = 10;
+    std::size_t repeats = 20;
 };
 
 struct Result {

@@ -1,6 +1,7 @@
 #include <torch/torch.h>
 
 #include "bench.hpp"
+#include "math.hpp"
 #include "ops.hpp"
 
 using namespace attn;
@@ -19,7 +20,9 @@ void run_attention_benchmarks() {
     Tensor K = K_shared.as_tensor();
     Tensor V = V_shared.as_tensor();
 
-    runner.run("My attention", [&]() { ops::attention(Q, K, V); });
+    runner.run("My attention naive", [&]() { ops::attention(Q, K, V, attn::math::MatMulType::NAIVE); });
+    runner.run("My attention cf", [&]() { ops::attention(Q, K, V, attn::math::MatMulType::CACHE_OPTIMIZED); });
+    runner.run("My attention simd", [&]() { ops::attention(Q, K, V, attn::math::MatMulType::SIMD); });
 
     auto t_Q = Q_shared.as_torch();
     auto t_K = K_shared.as_torch();

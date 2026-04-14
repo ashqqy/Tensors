@@ -19,8 +19,8 @@ foreach(TARGET_NAME IN LISTS TARGETS)
         ${TORCH_LIBRARIES}
     )
 
-    target_compile_options(${TARGET_NAME} PRIVATE ${COMPILE_OPT})
-    target_link_options(${TARGET_NAME} PRIVATE ${LINK_OPT})
+    target_compile_options(${TARGET_NAME} PRIVATE ${COMPILE_OPT} -mavx2 -mfma -march=native)
+    target_link_options(${TARGET_NAME} PRIVATE ${LINK_OPT} -mavx2 -mfma -march=native)
     
 endforeach()
 
